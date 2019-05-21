@@ -1,0 +1,354 @@
+#include <stdio.h>
+#include <windows.h>
+#include <math.h>
+#include "frontend.h"
+
+int pleaseWait();
+int check (int umur, float berat, float tinggi);
+int optional(int a, float b, float c );
+int listdiet(float kalori, float asupan);
+float asup=0;
+
+
+
+int main(){
+	char nama[100];
+	int choice,age;
+	float weight,height;
+
+	Beep(500,500);
+	Beep(600,500);
+	Beep(700,500);
+	pleaseWait();
+	FILE*ab;
+	ab=fopen("welcome.txt","r");
+	while(1){
+		int z=fgetc(ab);
+		if(z==EOF) break;
+		else if (z=='#')printfColor(WHITE,LGREEN," ");
+		else printf ("%c",z);
+	}
+	printf ("\n++++++++++++++++++++++++++++++++++++++++++++++");
+	printf ("         	 \n\tWelcome to Healthycare");
+	printf ("\n++++++++++++++++++++++++++++++++++++++++++++++");
+
+
+	printf ("\n[1] Come on let's get health");
+	printf ("\n[2] Help");
+	printf ("\n[3] Exit program");
+	printf ("\nYour choice:	");
+	choice=getche();
+
+
+	if (choice=='1'){
+		system ("cls");
+		printf ("++++++++++++++++++++++++++++++++++++++++++++++");
+		printf ("         	 \n\tWelcome to Healthy Care");
+		printf ("\n++++++++++++++++++++++++++++++++++++++++++++++");
+		printf ("\nHai I'm Doctor Health. What is your name:	");
+		scanf (" %[^\n]%*c",nama);
+		printf ("Okey, %s. \nWe will ask your further question to get know your condition",nama);
+		printf ("\nHow old are you:	");
+		scanf ("%d",&age);
+		printf ("Your weight(in kg):	",weight);
+		scanf ("%f",&weight);
+		printf ("Your height(in meter):	");
+		scanf ("%f",&height);
+		check(age,weight,height);
+	}
+	
+	if(choice=='2'){
+		system("cls");
+		printf ("\n[1] Program ini digunakan untuk membantu mereka\n    yang mengalami masalah berat badan");
+		printf ("\n[2] Kembali ke menu awal, lalu tekan 1 untuk mengecek BMI anda\n");
+		system ("pause\n");
+		return main();
+	}
+	if (choice=='3'){
+		system("cls");
+		FILE*ops;
+		ops=fopen("thankyou.txt","r");
+		while(1){
+			int y=fgetc(ops);
+			if (y==EOF) break;
+			if (y=='#'){printfColor(WHITE,LPURPLE," ");}
+			else printf ("%c",y);
+		}
+		fclose(ops);
+		Beep(700,500);
+		Beep(600,500);
+		Beep(500,500);
+		exit (0);
+	}
+	else {
+		printf ("\nMasukkan anda salah");
+		return main();
+	}
+
+}
+
+
+int	pleaseWait(){
+	int i;
+	printf ("\nPlease wait");
+	for(i=0;i<=4;i++){
+		printf(".");
+		Sleep(100);
+	}
+
+	system ("cls");
+}
+
+int check (int umur, float berat, float tinggi){
+	system ("cls");
+	pleaseWait();
+	const int au=umur;
+	const float ab=berat,at=tinggi;
+	float BMI,BMR;
+	printf ("++++++++++++++++++++++++++++++++++++++++++++++");
+	printf ("         	 \n\tWelcome to Healthy Care");
+	printf ("\n++++++++++++++++++++++++++++++++++++++++++++++");
+	const char*kategori[5]={"Kurang berat","Kurang berat ringan", "normal", "gemuk", "obesitas"};
+	BMI=berat/pow(tinggi,2);
+
+	if (BMI<17.00){
+		printf ("\nYour BMI:%.2f (%s)",BMI,kategori[0]);
+	}
+	else if (BMI>=17.00 && BMI<=18.4){
+		printf ("\nYour BMI:%.2f (%s)",BMI,kategori[1]);
+	}
+	else if (BMI>=18.5 && BMI<=25.00){
+		printf ("\nYour BMI:%.2f (%s)",BMI,kategori[2]);
+	}
+	else if (BMI>=25.01 && BMI<=27.00){
+		printf ("\nYour BMI:%.2f (%s)",BMI,kategori[3]);
+	}
+	else if (BMI>27.01){
+		printf ("\nYour BMI:%.2f (%s)",BMI,kategori[4]);
+	}
+	else {
+		printf ("\nMasukkan salah");
+		check(au,ab,at);
+	}
+	optional(umur,berat,tinggi);
+}
+
+int optional(int a, float b, float c ){		//a=umur, b=berat, c tinggi
+	const int aa=a;
+	const float bb=b,cc=c;
+	char memilih,d;
+	float BMR;
+	int fisik;
+	printf ("\nApakah anda ingin melanjutkan (y/n)?	");
+	memilih=getche();
+	if (memilih=='y' || memilih=='Y'){
+		printf ("\nYour gender(girl=g / boy=b):	");
+		d= getche();
+		if (d=='g'|| d=='G'){
+			BMR=655+(9.6*b)+(1.8*c*100)-(4.7*a);
+		}
+		else if (d=='b'|| d=='B'){
+			BMR=66+(13.7*b)+(5*c*100)-(6.8*a);
+		}
+		else {
+			printf ("\nMasukkan anda salah\n");
+		    optional (aa,bb,cc);
+		}
+		printf ("\nFaktor aktivitas fisik:	");
+		printf ("\n[1]Sangat jarang olahraga");
+		printf ("\n[2]Jarang berolahraga(1-3hari/minggu)");
+		printf ("\n[3]Normal berolahraga(3-5hari/minggu)");
+		printf ("\n[4]Sering berolahraga(6-7hari/minggu)");
+		printf ("\n[5]Sangat sering berolahraga(setiap hari 2x sehari)\n");
+		scanf ("%d",&fisik);
+		if (fisik==1){
+			BMR*=2;
+		}
+		else if (fisik==2){
+			BMR*=1.375;
+		}
+		else if (fisik==3){
+			BMR*=1.55;
+		}
+		else if (fisik==4){
+			BMR*=1.725;
+		}
+		else if (fisik==5){
+			BMR*=1.9;
+		}
+		else {
+			optional (aa,bb,cc);
+		}
+		listdiet(BMR,asup);
+	}
+		else if (memilih=='n' || memilih=='N'){
+			system ("pause\n");
+			return main();
+		}
+		else {optional (aa,bb,cc);}
+}
+
+int listdiet(float kalori, float asup){
+	const float clr=kalori;
+	float asupan=asup;
+	char jawaban;
+	int input,time=10;
+	system ("cls");
+	pleaseWait();
+	printf ("++++++++++++++++++++++++++++++++++++++++++++++");
+	printf ("         	 \n\tWelcome to Healthy Care");
+	printf ("\n++++++++++++++++++++++++++++++++++++++++++++++");
+	printf ("\nKalori yang anda butuhkan sehari:%.2fkal	",kalori);
+	printf ("\nAsupan kalori anda saat ini: %.2fkal",asupan);
+
+	printf (" \nApakah anda ingin diet(y/n)? \n");
+	scanf ("%s",&jawaban);
+
+	if (jawaban=='y' || jawaban=='Y'){
+		system ("cls");
+		FILE*as=fopen("OCD.txt","r");
+		while(1){
+		int x=fgetc(as);
+		if(x==EOF) break;
+		printf("%c",x);
+	}
+		printf ("\nWelcome to OCD");
+		printf ("\n[1] Start Eating");
+		printf ("\n[2] Help");
+		printf ("\n[3] O7W");
+		printf ("\n[4] Exit\n");
+		scanf (" %d", &input);
+		system ("cls");
+		if (input==1){
+			
+			
+			while (time!=0){
+				printf ("Your mealtime will be ended in: %d",time);
+				time--;
+				Sleep(1000);
+				system("cls");
+			}
+			asupan+=300;
+			printf ("\nYour mealtime is ended\n");
+			FILE*chas;
+			chas=fopen("Asupan.txt","w");
+			fprintf (chas,"Asupan yang sudah anda makan : %.2f kal",asupan);
+			listdiet(clr,asupan);
+		}
+		if (input==2){
+			int help();
+			
+		}
+
+		if (input==3){
+				
+				 asupan=asupan-100;
+				FILE*chas;
+				chas=fopen("Asupan.txt","w");
+				fprintf (chas,"Asupan yang sudah anda makan : %.2f kal",asupan);
+
+				while (time!=0){
+					printf ("\nJumping jack: ");
+					printf ("%d",time);
+					time--;
+					FILE*al;
+					al=fopen("jumpingjack1.txt","r");
+					while(1){
+						int w=fgetc(al);
+						if(w==EOF) break;
+						else if(w=='#') printfColor(NULL,PINK," ");
+						else printf("%c",w);
+
+					}
+					fclose(al);
+					Sleep(1000);
+					system("cls");
+					
+					printf ("\nJumping jack: ");
+					printf ("%d",time);
+					FILE*ao;
+					ao=fopen("jumpingjack2.txt","r");
+					while(1){
+						int z=fgetc(ao);
+						if(z==EOF) break;
+						else if(z=='#') {printfColor(NULL,LGREEN," ");}
+						else printf("%c",z);
+
+					}
+					fclose(ao);
+					Sleep(1000);
+					system("cls");
+				}
+				time=10;
+				while (time!=0){
+					printf ("\nPush up: ");
+					printf ("%d",time);
+					time--;
+					FILE*ok1;
+					ok1=fopen("pushup1.txt","r");
+					while(1){
+						int p=fgetc(ok1);
+						if(p==EOF) break;
+						else if(p=='#') {printfColor(NULL,LLLBLUE," ");}
+						else printf("%c",p);
+
+					}
+					fclose(ok1);
+					Sleep(1000);
+					system("cls");
+					
+					printf ("\nPush up: ");
+					printf ("%d",time);
+					FILE*ok2;
+					ok2=fopen("pushup2.txt","r");
+					printf ("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\n\n\n\n");
+					while(1){
+						int l=fgetc(ok2);
+						if(l==EOF) break;
+						else if(l=='#') {printfColor(NULL,LYELLOW," ");}
+						else printf("%c",l);
+
+					}
+					fclose(ok2);
+					Sleep(1000);
+					system("cls");
+				
+				}
+				time=10;
+				while (time!=0){
+					printf ("\nWall Sit: ");
+					printf ("%d",time);
+					time--;
+					FILE*om1;
+					om1=fopen("wallsit.txt","r");
+					while(1){
+						int mm=fgetc(om1);
+						if(mm==EOF) break;
+						else if(mm=='#') {printfColor(NULL,LLLBLUE," ");}
+						else printf("%c",mm);
+
+					}
+					fclose(om1);
+					Sleep(1000);
+					system("cls");
+				}
+				 listdiet(clr,asupan);
+		}
+		if (input==4){
+			return main();
+		}
+	}
+	else if (jawaban=='n' || jawaban=='N'){
+			return main();
+	}
+	else {
+		printf ("\nMasukkan anda salah\n");
+		system("pause");
+		listdiet(clr,asupan);
+		
+	}
+}
+
+
+
+
